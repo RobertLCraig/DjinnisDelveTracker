@@ -1,0 +1,52 @@
+## Interface: 120100
+## Title: Djinni's Delve Tracker
+## Notes: Tracks the Midnight Delver's Call quests and works out what handing in the banked stack would get you.
+## Author: Djinni
+## Version: 0.6.5
+## IconTexture: Interface\Icons\inv_10_dungeonjewelry_titan_earring_1_color1
+## SavedVariables: DjinnisDelveTrackerDB
+## DefaultState: enabled
+## X-Category: Quests & Leveling
+
+# Libraries
+embeds.xml
+
+# Localization
+Locales\enUS.lua
+
+# Static data (plain tables, no dependencies)
+Data\Quests.lua
+Data\XPCurve.lua
+Data\XPBuffs.lua
+Data\Banners.lua
+
+# Core (defines the AceAddon object first)
+Core.lua
+
+# Modules (Catalogue and Roster before Scanner and Estimator, which read them)
+Modules\Catalogue.lua
+Modules\Roster.lua
+Modules\Locations.lua
+Modules\Estimator.lua
+Modules\Scanner.lua
+Modules\DelveState.lua
+
+# UI
+UI\DelvePanel.lua
+UI\MainWindow.lua
+UI\Tracker.lua
+
+# Options (AceConfig table -> panel + slash commands)
+Options.lua
+
+
+
+
+
+
+
+
+
+
+
+
