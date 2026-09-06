@@ -1,8 +1,25 @@
 # Handover: Djinni's Delve Tracker
 
-**Stage:** active, v0.5.0. The projection is now calibrated from real turn-ins rather than
-modelled from buffs (D13). Not yet re-run in game.
-**Last session:** 2026-07-21.
+> A World of Warcraft Retail addon that tracks the Midnight Delver's Call quests and works out what
+> handing in the banked stack would get you. Read this, then `docs/board/`, before changing
+> anything.
+
+**Stage:** active
+**Category:** addon
+**Status:** The projection is calibrated from real turn-ins rather than modelled from buffs (D13),
+and has not been re-run in game since.
+**THIS PAGE IS STALE ON VERSION AND EVERYTHING BELOW IT WAS WRITTEN BEFORE 12.1.0.** It says v0.5.0;
+`DjinnisDelveTracker.toc` says **v0.6.5**, and the only commit in this repository is
+`2026-08-15`, "Initial commit: Djinni's Delve Tracker 0.6.5". Two 12.1 traps that bite every addon
+in this workspace - secret values and silently refused `RegisterEvent` - are written up in
+`C:\Dev\WoWAddons\docs\DECISIONS.md` and are **not** reflected anywhere below. Read that file before
+trusting any API claim on this page.
+**A board now exists at `docs/board/`** and it is empty; the version drift above is the obvious
+first card.
+_Last updated: 2026-08-26 (board created, and this header brought onto the standard shape. Nothing
+below the header was rewritten and it still describes v0.5.0.)_
+
+**Last session (of the body below):** 2026-07-21.
 
 ## The +25% is Warband Mentored Leveling (solved)
 
