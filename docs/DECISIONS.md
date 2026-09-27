@@ -234,3 +234,19 @@ rather than just a total.
 That does not weaken the decision, it demonstrates it. The calibration had the projection right
 while the model was wrong about the reason, which is the whole point: the number matters, the
 explanation is optional. Measurement stays the primary path.
+
+## D14. Discovery takes Midnight quests only, by quest ID
+
+**Decision.** The Scanner only adds a `Delver's Call` quest whose ID is at or above the lowest
+seed ID (93372). On load, anything already stored below that line is removed: the catalogue
+entry, its `questXP` readings and every character's state for it.
+
+**Why.** The War Within delves use the same title prefix, so D1's title match let in Fungal
+Folly (83758), The Skittering Breach (83768) and Tak-Rethan Abyss (83771). They showed as rows
+in the Midnight list (found 2026-09-27: 13 rows where there should be 10). They pay a flat
+~1,300 XP that does not grow with level, and that pulled the measured growth (D8) down to
++0.78% per level against the +1.08% measured on Midnight quests alone.
+
+Quest IDs only go up, so a quest Blizzard adds to Midnight later gets a higher ID and is still
+discovered. The zone of the quest waypoint was rejected: the stored `mapID` values (2537, 424, 875)
+put Midnight and War Within quests on the same maps, so they cannot tell the two apart.

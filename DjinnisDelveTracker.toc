@@ -2,7 +2,7 @@
 ## Title: Djinni's Delve Tracker
 ## Notes: Tracks the Midnight Delver's Call quests and works out what handing in the banked stack would get you.
 ## Author: Djinni
-## Version: 0.6.5
+## Version: 0.6.6
 ## IconTexture: Interface\Icons\inv_10_dungeonjewelry_titan_earring_1_color1
 ## SavedVariables: DjinnisDelveTrackerDB
 ## DefaultState: enabled

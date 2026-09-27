@@ -45,6 +45,24 @@ function Catalogue:TitleMatches(title)
 end
 
 --============================================================================
+-- Midnight only
+--
+-- The War Within delves carry the same "Delver's Call:" prefix, so the title alone
+-- lets them in (Fungal Folly is 83758). They pay a flat ~1,300 XP that does not
+-- scale, which also dragged the measured growth down. Quest IDs only go up, so
+-- anything below the lowest seed is from an older expansion (DECISIONS D14).
+--============================================================================
+
+local ID_FLOOR
+for _, q in ipairs(ns.SEED_QUESTS) do
+    if not ID_FLOOR or q.id < ID_FLOOR then ID_FLOOR = q.id end
+end
+
+function Catalogue:Belongs(questID)
+    return questID ~= nil and questID >= ID_FLOOR
+end
+
+--============================================================================
 -- Entries
 --============================================================================
 
@@ -61,7 +79,7 @@ end
 -- Returns true when this was the first time we had seen it.
 function Catalogue:Remember(questID, title, seeded)
     local all = Entries()
-    if not all or not questID then return false end
+    if not all or not self:Belongs(questID) then return false end
 
     local entry = all[questID]
     local isNew = false
@@ -87,6 +105,8 @@ function Catalogue:SeedFromData()
     local all = Entries()
     if not all then return end
 
+    self:PruneOlderExpansions()
+
     for _, q in ipairs(ns.SEED_QUESTS) do
         local entry = all[q.id]
         if not entry then
@@ -99,6 +119,21 @@ function Catalogue:SeedFromData()
         end
     end
     self:RequestMissingTitles()
+end
+
+-- Drop anything discovery let in before Belongs existed: the entry, its XP readings
+-- and every character's state for it.
+function Catalogue:PruneOlderExpansions()
+    local global = ns.db.global
+    for questID in pairs(global.catalogue) do
+        if not self:Belongs(questID) then
+            global.catalogue[questID] = nil
+            global.questXP[questID] = nil
+            for _, rec in pairs(global.characters) do
+                if rec.quests then rec.quests[questID] = nil end
+            end
+        end
+    end
 end
 
 function Catalogue:RequestMissingTitles()
