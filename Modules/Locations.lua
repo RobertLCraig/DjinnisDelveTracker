@@ -71,16 +71,26 @@ function Locations:HarvestFromMap(mapID)
         if key then byName[key] = questID end
     end
 
+    local isZone = ns.ZONE_ORDER[mapID] ~= nil
     local found = 0
     for _, poiID in ipairs(poiIDs) do
         local info = C_AreaPoiInfo.GetAreaPOIInfo(mapID, poiID)
         local questID = info and info.name and byName[Normalise(info.name)]
+        -- The zone is recorded apart from the coordinates, because a quest waypoint
+        -- can own those and it points wherever the quest wants, not at the delve's zone.
+        if questID and isZone then ns.Catalogue:Get(questID).zone = mapID end
         if questID and info.position then
             local x, y = info.position:GetXY()
             if Store(questID, mapID, x, y, "poi") then found = found + 1 end
         end
     end
     return found
+end
+
+-- Every Midnight zone, wherever the player is standing. This is what fills in the zone
+-- each delve is grouped under, so the grouping works on the first login.
+function Locations:HarvestZones()
+    for _, mapID in ipairs(ns.ZONE_MAPS) do self:HarvestFromMap(mapID) end
 end
 
 -- The current zone, and every other zone on the same continent. Walking the continent

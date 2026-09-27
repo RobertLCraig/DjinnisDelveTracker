@@ -240,6 +240,7 @@ end
 
 function Scanner:OnZoneChanged()
     self:DiscoverFromMap()
+    ns.Locations:HarvestZones()
     ns.Locations:HarvestNearby()
     self:RequestScan()
 end

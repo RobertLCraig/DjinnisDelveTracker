@@ -25,3 +25,18 @@ ns.SEED_QUESTS = {
     { id = 93427, delve = "Sunkiller Sanctum" },
     { id = 93428, delve = "Shadowguard Point" },
 }
+
+-- The four Midnight zones, in levelling order, which is the order the list groups by.
+-- uiMapIDs taken from the in-game-tested waypoints in DjinnisDataTexts'
+-- MajesticBeast.lua. Which delve sits in which zone is not written down here: it is read
+-- off each zone's delve POIs at runtime (Locations:HarvestZones), and the zone name
+-- comes from C_Map.GetMapInfo, so it is localised.
+ns.ZONE_MAPS = {
+    2395,   -- Eversong Woods
+    2437,   -- Zul'Aman
+    2413,   -- Harandar
+    2405,   -- Voidstorm
+}
+
+ns.ZONE_ORDER = {}
+for i, mapID in ipairs(ns.ZONE_MAPS) do ns.ZONE_ORDER[mapID] = i end

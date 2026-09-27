@@ -24,6 +24,7 @@ local HEADER_SPACE = 126   -- title bar, portrait, tab row, column header
 local FOOTER_SPACE = 226   -- summary, cap line, buff row, wait list
 
 local frame, charRows, warbandRows
+local zoneHeadings = {}
 
 --============================================================================
 -- Small builders
@@ -108,9 +109,26 @@ end
 -- Character tab
 --============================================================================
 
+-- The zone a delve is grouped under, as a sort rank. A delve whose zone has not been
+-- read yet sorts last, under its own heading.
+local UNKNOWN_ZONE = 99
+
+local function ZoneRank(questID)
+    local entry = ns.Catalogue:Get(questID)
+    return entry and ns.ZONE_ORDER[entry.zone] or UNKNOWN_ZONE
+end
+
+local function ZoneName(questID)
+    local entry = ns.Catalogue:Get(questID)
+    local info = entry and entry.zone and C_Map.GetMapInfo(entry.zone)
+    return info and info.name or L["ZONE_UNKNOWN"]
+end
+
 local function SortedQuestIDs(rec)
     local ids = ns.Catalogue:Ordered()
     table.sort(ids, function(a, b)
+        local za, zb = ZoneRank(a), ZoneRank(b)
+        if za ~= zb then return za < zb end
         local sa = ns.STATE_ORDER[rec.quests[a] or ns.STATE.NOT_STARTED] or 9
         local sb = ns.STATE_ORDER[rec.quests[b] or ns.STATE.NOT_STARTED] or 9
         if sa ~= sb then return sa < sb end
@@ -139,12 +157,31 @@ local function LayoutCharacterTab()
     local panel = frame.charPanel
     local ids = SortedQuestIDs(rec)
 
+    -- A zone heading takes a row slot of its own, so slot runs ahead of the row index.
+    local slot, headings, lastZone = 0, 0, nil
+
     for i, questID in ipairs(ids) do
+        local zone = ZoneRank(questID)
+        if zone ~= lastZone then
+            lastZone = zone
+            slot, headings = slot + 1, headings + 1
+            local heading = zoneHeadings[headings]
+            if not heading then
+                heading = MakeFontString(panel, "GameFontNormal")
+                zoneHeadings[headings] = heading
+            end
+            heading:ClearAllPoints()
+            heading:SetPoint("BOTTOMLEFT", panel, "TOPLEFT", 0, -slot * ROW_HEIGHT + 3)
+            heading:SetText(ZoneName(questID))
+            heading:Show()
+        end
+        slot = slot + 1
+
         local row = AcquireRow(panel, i, charRows)
         local state = rec.quests[questID] or ns.STATE.NOT_STARTED
         local colour = ns.STATE_COLOR[state]
 
-        PlaceRow(row, panel, i)
+        PlaceRow(row, panel, slot)
         row.questID = questID
         row:SetScript("OnClick", function(self) ns.Locations:Waypoint(self.questID) end)
         row:SetScript("OnEnter", RowTooltip)
@@ -172,7 +209,8 @@ local function LayoutCharacterTab()
     end
 
     for i = #ids + 1, #charRows do charRows[i]:Hide() end
-    return #ids
+    for i = headings + 1, #zoneHeadings do zoneHeadings[i]:Hide() end
+    return slot
 end
 
 local function UpdateSummary()

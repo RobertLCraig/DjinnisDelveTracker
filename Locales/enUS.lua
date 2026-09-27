@@ -30,6 +30,7 @@ L["WARMODE_INACTIVE"]    = "War Mode is not in effect here (city or instance). H
 L["WAITLIST_WASTED"] = "caps at max, %s XP burned"
 L["WAITLIST_FLAT"]   ="Bigger XP, same levels: the model scales quest XP and the level bar together. Ding once with a quest banked and the addon will know for real."
 L["ROW_HINT"]        = "Click a delve to set a waypoint"
+L["ZONE_UNKNOWN"]    = "Zone not read yet"
 L["WAITLIST_HEADER"] = "If you wait and hand in at:"
 L["WAITLIST_GROWTH"] = "measured quest XP growth %+0.2f%% per level"
 L["WAITLIST_ROW"]    = "level %d"

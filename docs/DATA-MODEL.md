@@ -32,6 +32,9 @@ catalogue = {
         x, y      = number,   -- normalised map coordinates, 0-1 (NOT 0-100)
         locSource = string,   -- "quest" (C_QuestLog.GetNextWaypoint) or "poi"
                               -- (C_AreaPoiInfo, name-matched). "quest" wins.
+        zone      = number,   -- uiMapID of the Midnight zone whose delve POIs list it
+                              -- (one of ns.ZONE_MAPS). The list groups by it. nil
+                              -- until read. Not mapID: a quest waypoint can own that.
     },
 }
 
