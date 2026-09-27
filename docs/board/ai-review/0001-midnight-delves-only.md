@@ -23,3 +23,15 @@ catalogue, `questXP` and every character's `quests`. Decision D14.
 4. Accepting a War Within Delver's Call quest does not add it back.
 
 Nothing here can run a game client, so all four are unverified.
+
+## Also built: group by zone (37e6b37, v0.6.7, deployed)
+
+Rob asked the same day for the list to be grouped by zone. At login the addon reads the delve
+POIs of the four Midnight zone maps (`ns.ZONE_MAPS`: 2395, 2437, 2413, 2405) and stores the zone
+on each catalogue entry as `zone`. The Character tab puts a heading above each zone, in levelling
+order.
+
+5. The Character tab shows zone headings: Eversong Woods, Zul'Aman, Harandar, Voidstorm.
+6. Each delve sits under the correct zone. A delve under "Zone not read yet" means its POI name
+   did not match its quest title. Say which delve it is.
+7. The window is tall enough for the extra heading rows. No row is cut off at the bottom.
