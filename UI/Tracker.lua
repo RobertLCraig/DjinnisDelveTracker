@@ -14,6 +14,44 @@ ns.Tracker = Tracker
 
 local panel
 
+-- Edit Mode: anything on screen is movable from it. Same approach as
+-- DjinnisUIEnhancements/EditMode.lua, cut down to a box you select and drag: the
+-- panel has one setting worth editing (scale) and the options panel already has it.
+-- Blizzard's selection box, with its OnMouseDown and drag scripts replaced, because
+-- the stock ones hand the frame to EditModeManagerFrame:SelectSystem, which only knows
+-- Blizzard systems. The position is saved in the same fields the unlocked drag uses,
+-- so there is nothing to migrate.
+local function AddToEditMode()
+    local sel = CreateFrame("Frame", nil, panel, "EditModeSystemSelectionTemplate")
+    sel:SetAllPoints()
+    sel:SetFrameStrata("HIGH") -- over Blizzard's own boxes (UIEnhancements, 2026-09-21)
+    sel.system = { GetSystemName = function() return L["ADDON_NAME"] end }
+    sel:Hide()
+
+    sel:SetScript("OnDragStart", function()
+        if not InCombatLockdown() then panel:StartMoving() end
+    end)
+    sel:SetScript("OnDragStop", function()
+        panel:StopMovingOrSizing()
+        ns.SavePosition(panel, ns.db.profile.tracker)
+    end)
+    sel:SetScript("OnMouseDown", function()
+        EditModeManagerFrame:ClearSelectedSystem()
+        sel:ShowSelected()
+    end)
+    hooksecurefunc(EditModeManagerFrame, "SelectSystem", function()
+        if sel:IsShown() then sel:ShowHighlighted() end
+    end)
+
+    EventRegistry:RegisterCallback("EditMode.Enter", function()
+        sel:ShowHighlighted()
+    end, sel)
+    EventRegistry:RegisterCallback("EditMode.Exit", function()
+        sel:Hide()
+    end, sel)
+    if EditModeManagerFrame:IsEditModeActive() then sel:ShowHighlighted() end
+end
+
 local function Build()
     panel = CreateFrame("Frame", "DjinnisDelveTrackerPanel", UIParent, "BackdropTemplate")
     panel:SetSize(200, 30)
@@ -38,7 +76,7 @@ local function Build()
     end)
     panel:SetScript("OnMouseUp", function(_, button)
         if button == "RightButton" then
-            if ns.OpenOptions then ns.OpenOptions() end
+            ns.OpenContextMenu(panel)
         else
             ns.MainWindow:Toggle()
         end
@@ -64,6 +102,7 @@ local function Build()
     panel.text:SetPoint("CENTER")
 
     ns.RestorePosition(panel, ns.db.profile.tracker)
+    AddToEditMode()
 end
 
 function Tracker:Refresh()

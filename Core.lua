@@ -166,6 +166,20 @@ function ns.SavePosition(frame, cfg)
     cfg.point, cfg.relPoint, cfg.x, cfg.y = point, relPoint, x, y
 end
 
+-- Right-click on the tracker panel or the broker icon. A right-click offers a menu,
+-- it never acts by itself.
+function ns.OpenContextMenu(owner)
+    MenuUtil.CreateContextMenu(owner, function(_, root)
+        root:CreateTitle(L["ADDON_NAME"])
+        root:CreateButton(L["MENU_OPTIONS"], function()
+            if ns.OpenOptions then ns.OpenOptions() end
+        end)
+        root:CreateCheckbox(L["OPT_LOCK_TRACKER"],
+            function() return ns.db.profile.tracker.locked end,
+            function() ns.db.profile.tracker.locked = not ns.db.profile.tracker.locked end)
+    end)
+end
+
 --============================================================================
 -- LDB / minimap
 --============================================================================
@@ -178,9 +192,9 @@ local function BuildBroker()
         type = "data source",
         text = "-",
         icon = ns.ICON,
-        OnClick = function(_, button)
+        OnClick = function(owner, button)
             if button == "RightButton" then
-                if ns.OpenOptions then ns.OpenOptions() end
+                ns.OpenContextMenu(owner)
             else
                 if ns.MainWindow then ns.MainWindow:Toggle() end
             end
