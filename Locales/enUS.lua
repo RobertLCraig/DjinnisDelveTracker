@@ -77,7 +77,8 @@ L["TRACKER_LINE"]  = "Banked %d/%d -> level %d (%d%%)"
 
 -- Broker / tooltip
 L["BROKER_LEFT_CLICK"]  = "Left-click: open the tracker"
-L["BROKER_RIGHT_CLICK"] = "Right-click: settings"
+L["BROKER_RIGHT_CLICK"] = "Right-click: menu"
+L["MENU_OPTIONS"]       = "Options"
 L["TOOLTIP_STACK"]      = "Banked stack"
 
 -- Chat
