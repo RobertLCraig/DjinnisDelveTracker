@@ -71,3 +71,5 @@ In game, still to check:
    them; the lock checkbox toggles, and a locked panel no longer drags outside Edit Mode.
 3. Known gap: if the panel is hidden (tracker turned off, or no summary yet) it has no box in
    Edit Mode. Assumed right for a panel the user turned off.
+
+**2026-09-29** The loop moved this card from in-progress/ to human-review/ WITHOUT trying it. All 2 of its open acceptance criteria say proves: manual, so there is nothing left an unattended session could close and starting one would change nothing. Each open criterion names what to look at and what a pass is: tick what passes and move the card on, or say what failed and move it back to todo/.
