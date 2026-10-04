@@ -73,3 +73,25 @@ In game, still to check:
    Edit Mode. Assumed right for a panel the user turned off.
 
 **2026-09-29** The loop moved this card from in-progress/ to human-review/ WITHOUT trying it. All 2 of its open acceptance criteria say proves: manual, so there is nothing left an unattended session could close and starting one would change nothing. Each open criterion names what to look at and what a pass is: tick what passes and move the card on, or say what failed and move it back to todo/.
+
+### 2026-10-04 manager (m20261004153633-f962)
+
+**outcome: rob**
+
+The code looks complete, and the two open checks need a person in the live game.
+
+**what the session said**
+
+I read the code that the build note talks about. The code does what the card asks.
+
+- **Edit Mode:** In `UI/Tracker.lua`, `AddToEditMode` puts Blizzard's selection box over the panel. The box shows when Edit Mode opens and hides when it closes. When you drag the box, it saves the position through `ns.SavePosition` in `Core.lua`, into the same saved fields as before.
+- **Right-click:** In `Core.lua`, `ns.OpenContextMenu` uses `MenuUtil.CreateContextMenu`. The menu has "Options" and a lock checkbox. The panel's `OnMouseUp` in `Build` (in `UI/Tracker.lua`) uses it, and so does the broker `OnClick` in `BuildBroker` (in `Core.lua`). Neither one opens the options directly now.
+
+No review finding disproves the ticked criterion. The two open criteria can only be checked in a live game client, so a builder cannot close them.
+
+What Rob must do: deploy, then do the in-game checks 1 and 2 from the card's build note.
+
+WHY: The code looks complete, and the two open checks need a person in the live game.
+
+OUTCOME: rob
+
