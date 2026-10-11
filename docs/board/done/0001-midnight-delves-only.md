@@ -46,7 +46,16 @@ each catalogue entry as `zone`. The Character tab puts a heading above each zone
 
 ## Acceptance
 
-All `proves: manual`: the steps in the table above are criteria 1-7.
+<!-- AC:BEGIN -->
+- [ ] #1 WHEN the Character tab is shown, THE ADDON SHALL list 10 delves, without Fungal Folly, The Skittering Breach or Tak-Rethan Abyss. proves: manual
+- [ ] #2 WHEN the Warband tab is shown, THE ADDON SHALL show no row or count for those three. proves: manual
+- [ ] #3 WHEN the wait list footer is read, THE ADDON SHALL show measured quest XP growth above +0.78%, near +1.08%. proves: manual
+- [ ] #4 WHEN a War Within Delver's Call quest is accepted and the UI reloaded, THE ADDON SHALL NOT list it again. proves: manual
+- [ ] #5 WHEN the Character tab is shown, THE ADDON SHALL order the headings Eversong Woods, Zul'Aman, Harandar, Voidstorm. proves: manual
+- [ ] #6 WHEN each heading is read, THE ADDON SHALL file every delve under its real zone, none under "Zone not read yet". proves: manual
+- [ ] #7 WHEN the list is drawn, THE ADDON SHALL show the bottom row fully, not cut off by the footer. proves: manual
+- [x] #8 WHEN the addon loads, THE ADDON SHALL prune the three War Within delves from the catalogue, `questXP` and character state, and SHALL accept a future higher quest ID. (proved offline: the 2026-09-29 review's Lua 5.1 harness over `PruneOlderExpansions` and `Belongs`, not committed)
+<!-- AC:END -->
 
 ## Comments
 
@@ -84,3 +93,5 @@ input is the game's own quest and map data. **Leaks:** nothing; the data is loca
 
 Outside this card, raised as `0002`: the tracker panel is drag-movable but not in Edit Mode, and its
 right-click opens the options panel directly.
+
+**2026-10-11** Clear-down (attended, agent). The card had no Acceptance list, only "the steps in the table are criteria 1-7", so the product list could not see the looks. Wrote the seven steps as `proves: manual` criteria and added #8, ticked, for the prune the 2026-09-29 review proved offline. Redeployed today with `bin\deploy.ps1 -Only DjinnisDelveTracker` (0002's files; the next dry run showed 75 unchanged). The independent review passed, so per the board README rule "A look waits on the product" this goes to `done/` with #1 to #7 open.

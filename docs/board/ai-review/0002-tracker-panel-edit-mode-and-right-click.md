@@ -95,3 +95,4 @@ WHY: The code looks complete, and the two open checks need a person in the live 
 
 OUTCOME: rob
 
+**2026-10-11** Clear-down (attended, agent). The game folder was older than `0c30a34`: today's dry run showed `Core.lua`, `Locales\enUS.lua` and `UI\Tracker.lua` changed. Deployed with `bin\deploy.ps1 -Only DjinnisDelveTracker`; the next dry run showed 75 unchanged, so the build is now in the game. The two open criteria are the in-game looks (checks 1 and 2 in the 2026-09-29 build note). Per the board README rule "A look waits on the product", moved to `ai-review/`: the 2026-10-04 pass was a manager pass, not an adversarial review.
