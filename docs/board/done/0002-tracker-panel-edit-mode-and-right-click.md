@@ -96,3 +96,74 @@ WHY: The code looks complete, and the two open checks need a person in the live 
 OUTCOME: rob
 
 **2026-10-11** Clear-down (attended, agent). The game folder was older than `0c30a34`: today's dry run showed `Core.lua`, `Locales\enUS.lua` and `UI\Tracker.lua` changed. Deployed with `bin\deploy.ps1 -Only DjinnisDelveTracker`; the next dry run showed 75 unchanged, so the build is now in the game. The two open criteria are the in-game looks (checks 1 and 2 in the 2026-09-29 build note). Per the board README rule "A look waits on the product", moved to `ai-review/`: the 2026-10-04 pass was a manager pass, not an adversarial review.
+
+### 2026-10-17 review (v20261017044143-77f9)
+
+**suite**
+
+No suite this job could find in WoWAddons:DjinnisDelveTracker, so none ran. That is not a pass.
+
+**acceptance: sound**
+
+I reviewed card 0002 against its three acceptance criteria, using only the code. I could not break it. Nothing was edited.
+
+**#1 Edit Mode box (manual, open).** This is in `UI/Tracker.lua`, function `AddToEditMode`.
+- It puts Blizzard's selection box over the panel.
+- I checked Blizzard's template in `wow-ui-source` (`Blizzard_EditMode/Shared/EditModeSystemTemplates.xml`). The template already takes the mouse and left-button drag, so the replaced drag code will run.
+- The box drags the panel even when the panel is locked. That is correct, because Edit Mode must always move it.
+- The position saves through `ns.SavePosition` (`Core.lua`). `Build` reads it back with `ns.RestorePosition` after `/reload`.
+- Nothing stops this check from passing.
+
+**#2 Right-click menu (manual, open).** This is `ns.OpenContextMenu` in `Core.lua`.
+- It makes a menu with a title, "Options" and the lock checkbox.
+- The panel calls it from `OnMouseUp` in `Build` (`UI/Tracker.lua`). The broker icon calls it from `OnClick` in `BuildBroker` (`Core.lua`).
+- Neither one opens the options directly now.
+- `ns.OpenOptions` exists in `Options.lua`. `L["OPT_LOCK_TRACKER"]` exists in `Locales/enUS.lua`.
+- Nothing stops this check from passing.
+
+**#3 Syntax check (ticked).** No code proves it wrong.
+
+The two open boxes are in-game checks for you. They are not findings.
+
+**What you do now:** the card can go to `done/`. Later, in game, do checks 1 and 2 from the card's 2026-09-29 build note.
+
+VERDICT: sound
+
+**scope: sound**
+
+**Scope review of card 0002**
+
+**What the card asked for, and what was built:**
+- Edit Mode box over the panel: built, in `UI/Tracker.lua` `AddToEditMode`.
+- Right-click menu on the panel and the broker icon: built, in `Core.lua` `ns.OpenContextMenu`. The panel uses it in `Build`, and the broker uses it in `BuildBroker`.
+- The lock checkbox works at once. The panel's `OnDragStart` reads `tracker.locked` on every drag.
+- "Migrate the saved position": nothing needs to move. The Edit Mode drag saves through `ns.SavePosition` into the same `profile.tracker` fields.
+- Left-click did not change. `MainWindow.lua` did not change. Both fences hold.
+
+**Extra things in the range:**
+- A root `LICENSE` and `libs/CallbackHandler-1.0/LICENSE.txt`. The card did not ask for these. They are legal files, not code. They change no behaviour.
+- The rewrite of card 0001 and its move to `done/`. That is board work from the 2026-10-11 clear-down. It is not part of this card's build.
+
+These extras are outside the card, but they break no criterion. They do not touch the tracker or the menu.
+
+**Half done:** If the panel is hidden, it gets no Edit Mode box. The builder wrote this down as a known gap. It only matters for a panel the user turned off, so criterion #1 can still pass in game.
+
+I found nothing that disproves a criterion.
+
+VERDICT: sound
+
+**breakage: sound**
+
+I tried to find something this change breaks. I found nothing.
+
+- **Callers:** Both right-click paths now call `ns.OpenContextMenu`: the panel's `OnMouseUp` in `Build` (`UI/Tracker.lua`) and the broker `OnClick` in `BuildBroker` (`Core.lua`). Nothing else opens the options on a right-click.
+- **Blizzard API:** I checked each call against `wow-ui-source`. `ClearSelectedSystem`, `SelectSystem` and `IsEditModeActive` exist in `EditModeManager.lua`. `ShowSelected` and `ShowHighlighted` exist in `EditModeSystemTemplates.lua`. The selection box's own `OnMouseDown` and drag scripts are replaced, so Blizzard's manager never receives our frame.
+- **Lock rule:** Outside Edit Mode, the panel's own `OnDragStart` still checks `tracker.locked`. Inside Edit Mode, the selection box drags the panel even when it is locked. That is correct, because Edit Mode must always be able to move it.
+- **Saved position:** Both drag paths save through `ns.SavePosition` into the same `profile.tracker` fields. Old saved positions still load.
+- **Comments:** The file header says "drag to move it while it is unlocked". That is still true.
+- **Edge case:** A hidden panel gets no box in Edit Mode, because the box is a child of the panel. The build note already says this. A panel that is turned off does not need to be placed, so criterion #1 is not broken.
+
+The two open criteria need a check in the game. That is not a finding.
+
+VERDICT: sound
+
